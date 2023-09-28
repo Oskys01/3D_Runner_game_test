@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -30,12 +31,15 @@ public class PlayerHandler : MonoBehaviour
         transform.Translate(new Vector3(input.x * sideSpeed, 0, canMove ? runSpeed : 0) * Time.deltaTime);
     }
 
-    public void OnCollisionEnter(Collision collision)
+    public async Task OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.name.StartsWith("Obs"))
         {
             canMove = false;
             GameObject.Find("Remy").GetComponent<Animator>().Play("FallingDown");
+            GetComponent<Rigidbody>().AddForce(Vector3.forward * -1 * 10, ForceMode.Impulse);
+            await Task.Delay(3000);
+            canMove = true;
         }
         
     }
