@@ -37,7 +37,7 @@ public class PlayerHandler : MonoBehaviour
         {
             canMove = false;
             GameObject.Find("Remy").GetComponent<Animator>().Play("FallingDown");
-            GetComponent<Rigidbody>().AddForce(Vector3.forward * -1 * 10, ForceMode.Impulse);
+            GetComponent<Rigidbody>().AddForce(Vector3.back, ForceMode.Impulse);
             await Task.Delay(3000);
             canMove = true;
         }
