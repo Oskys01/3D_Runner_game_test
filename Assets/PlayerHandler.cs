@@ -13,8 +13,9 @@ public class PlayerHandler : MonoBehaviour
     private Vector2 input = Vector2.zero;
 
     private bool canMove = true;
-    private bool canJump = false;
-    
+    private bool canJump = true;
+    private bool canMoveSide = true;
+
 
     public void OnMove(InputAction.CallbackContext context)
     {
@@ -22,17 +23,71 @@ public class PlayerHandler : MonoBehaviour
         input = context.ReadValue<Vector2>();
     }
 
-    public void OnJump(){
-        GetComponent<Rigidbody>().AddForce(Vector3.up * jumpSpeed, ForceMode.Impulse);
-        GameObject.Find("Remy").GetComponent<Animator>().Play("Jumping");
-
+    public void OnJump()
+    {
+        if (canJump == true)
+        {
+            canJump = false;
+            GetComponent<Rigidbody>().AddForce(Vector3.up * jumpSpeed, ForceMode.Impulse);
+            GameObject.Find("Remy").GetComponent<Animator>().Play("Jumping");
+        }
     }
 
-    
+
     void Update()
     {
-        transform.Translate(new Vector3(input.x * sideSpeed, 0, canMove ? runSpeed : 0) * Time.deltaTime);
-        
+
+        float x =
+            transform.position.x < -4.2
+                ? input.x > 0
+                    ? input.x * sideSpeed
+                    : 0
+                : transform.position.x > 4.5
+                    ? input.x < 0
+                        ? input.x * sideSpeed
+                        : 0
+                    : input.x * sideSpeed;
+
+        transform.Translate(new Vector3(x, 0, canMove ? runSpeed : 0) * Time.deltaTime);
+
+
+
+
+        //if (transform.position.x < -4.2)
+        //{
+        //    if (input.x > 0)
+        //    {
+        //        transform.Translate(new Vector3(input.x * sideSpeed, 0, canMove ? runSpeed : 0) * Time.deltaTime);
+
+        //    }
+        //    else
+        //    {
+        //        transform.Translate(new Vector3(0, 0, canMove ? runSpeed : 0) * Time.deltaTime);
+
+        //    }
+
+        //}
+        //else if (transform.position.x > 4.5)
+        //{
+        //    //transform.Translate(new Vector3(0, 0, canMove ? runSpeed : 0) * Time.deltaTime);
+        //    if (input.x < 0)
+        //    {
+        //        transform.Translate(new Vector3(input.x * sideSpeed, 0, canMove ? runSpeed : 0) * Time.deltaTime);
+        //    }
+
+        //    else
+        //    {
+        //        //transform.Translate(new Vector3(input.x * sideSpeed, 0, canMove ? runSpeed : 0) * Time.deltaTime);
+        //        transform.Translate(new Vector3(0, 0, canMove ? runSpeed : 0) * Time.deltaTime);
+
+        //    }
+        //}
+        //else
+        //{
+
+        //    transform.Translate(new Vector3(input.x * sideSpeed, 0, canMove ? runSpeed : 0) * Time.deltaTime);
+        //}
+
     }
 
     public async void OnCollisionEnter(Collision collision)
@@ -40,10 +95,10 @@ public class PlayerHandler : MonoBehaviour
         if (collision.gameObject.name.StartsWith("Obs"))
         {
             sideSpeed = 0f;
-            
+
 
             canMove = false;
-            
+
             GameObject.Find("Remy").GetComponent<Animator>().Play("FallingDown");
             GetComponent<Rigidbody>().AddForce(Vector3.back * 4, ForceMode.Impulse);
             await Task.Delay(1900);
@@ -51,14 +106,11 @@ public class PlayerHandler : MonoBehaviour
 
             await Task.Delay(200);
             canMove = true;
-            
+
         }
 
-        if (collision.gameObject.name.StartsWith("Plane"))
-        {
-            canJump = true;
-        }
-            
-        
+        canJump = true;
+
+
     }
 }
