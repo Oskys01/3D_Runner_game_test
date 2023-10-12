@@ -36,16 +36,13 @@ public class PlayerHandler : MonoBehaviour
 
     void Update()
     {
+        //INVISIBLE WALLS
 
         float x =
-            transform.position.x < -4.2
-                ? input.x > 0
-                    ? input.x * sideSpeed
-                    : 0
-                : transform.position.x > 4.5
-                    ? input.x < 0
-                        ? input.x * sideSpeed
-                        : 0
+            transform.position.x < -4.2 && input.x < 0
+                ? 0
+                : transform.position.x > 4.5 && input.x > 0
+                    ? 0
                     : input.x * sideSpeed;
 
         transform.Translate(new Vector3(x, 0, canMove ? runSpeed : 0) * Time.deltaTime);
@@ -92,6 +89,8 @@ public class PlayerHandler : MonoBehaviour
 
     public async void OnCollisionEnter(Collision collision)
     {
+        //OBSTACLE COLLISIONS
+
         if (collision.gameObject.name.StartsWith("Obs"))
         {
             sideSpeed = 0f;
@@ -106,6 +105,20 @@ public class PlayerHandler : MonoBehaviour
 
             await Task.Delay(200);
             canMove = true;
+
+        }
+
+        //COIN PICKUP
+
+        if (collision.gameObject.name.StartsWith("Coin"))
+        {
+            Debug.Log("Colliding with " + collision.gameObject.name.StartsWith("Coin"));
+            CoinCollect.coin++;
+
+            GameObject.Find("CoinSound").GetComponent<AudioSource>().Play();
+
+            Object.Destroy(collision.gameObject);
+
 
         }
 
