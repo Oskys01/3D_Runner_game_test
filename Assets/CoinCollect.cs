@@ -5,8 +5,10 @@ using UnityEngine;
 
 public class CoinCollect : MonoBehaviour
 {
-    public static int coin = 0;
+    public static int coinScore = 0;
     public float rotateSpeed = 10.5f;
+
+    
 
     void Update()
     {
