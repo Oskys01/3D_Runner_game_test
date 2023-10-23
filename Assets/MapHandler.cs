@@ -26,7 +26,7 @@ public class MapHandler : MonoBehaviour
 
         isGenerationInProgress = true;
         var obs = GameObject.Find("Obs1");
-        z += 10;
+        z += 800;
         Instantiate(obs, new Vector3(0, 0, z), Quaternion.identity);
         await Task.Delay(1000);
         // isGenerationInProgress = false;

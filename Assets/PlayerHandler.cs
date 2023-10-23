@@ -8,6 +8,7 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PlayerHandler : MonoBehaviour
@@ -21,6 +22,8 @@ public class PlayerHandler : MonoBehaviour
     private bool canJump = true;
     private int z = 0;
     private bool isGenerationInProgress = false;
+
+    public int lives = 3;
 
    
 
@@ -107,8 +110,23 @@ public class PlayerHandler : MonoBehaviour
 
         if (collision.gameObject.name.StartsWith("Obs"))
         {
+            lives--;
+
+            if (lives <= 0)
+            {
+                //play game over screen
+                GameObject.Find("GameOverUI").GetComponent<Animator>().Play("GameOver");
+                sideSpeed = 0;
+                runSpeed = 0;
+            }
+
+            var textObject = GameObject.Find("LivesCounter");
+            var textComponent = textObject.GetComponent<TextMeshProUGUI>();
+            textComponent.text = "Lives: " + lives.ToString();
+
             sideSpeed = 0f;
 
+            
 
             canMove = false;
 
@@ -120,7 +138,13 @@ public class PlayerHandler : MonoBehaviour
             await Task.Delay(200);
             canMove = true;
 
+            
+
+
         }
+        
+
+        
 
         //COIN PICKUP
 
@@ -149,4 +173,13 @@ public class PlayerHandler : MonoBehaviour
 
 
     }
+
+
+    public void RestartGame()
+    {
+        var currentSceneName = SceneManager.GetActiveScene().name;
+        SceneManager.LoadScene(currentSceneName);
+
+    }
+
 }
