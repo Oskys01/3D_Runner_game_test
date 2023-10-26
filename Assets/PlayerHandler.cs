@@ -23,7 +23,8 @@ public class PlayerHandler : MonoBehaviour
     private int z = 0;
     private bool isGenerationInProgress = false;
 
-    public int lives = 3;
+    public int life = 3;
+    public GameObject[] hearts;
 
    
 
@@ -110,19 +111,36 @@ public class PlayerHandler : MonoBehaviour
 
         if (collision.gameObject.name.StartsWith("Obs"))
         {
-            lives--;
+             life--;
 
-            if (lives <= 0)
+           if (life < 1)
+            {
+                Destroy(hearts[0].gameObject);
+                GameObject.Find("GameOverUI").GetComponent<Animator>().Play("GameOver");
+                sideSpeed = 0;
+                runSpeed = 0;
+
+            }
+            else if (life < 2)
+            {
+                Destroy(hearts[1].gameObject);
+            }
+            else if (life < 3)
+            {
+                Destroy(hearts[2].gameObject);
+            } 
+
+            /* if (life <= 0)
             {
                 //play game over screen
                 GameObject.Find("GameOverUI").GetComponent<Animator>().Play("GameOver");
                 sideSpeed = 0;
                 runSpeed = 0;
-            }
+            } */
 
             var textObject = GameObject.Find("LivesCounter");
             var textComponent = textObject.GetComponent<TextMeshProUGUI>();
-            textComponent.text = "Lives: " + lives.ToString();
+            textComponent.text = "Lives: " + life.ToString();
 
             sideSpeed = 0f;
 
@@ -138,7 +156,11 @@ public class PlayerHandler : MonoBehaviour
             await Task.Delay(200);
             canMove = true;
 
-            
+            if (life < 1)
+            {
+                //play game over idle animation
+                GameObject.Find("Remy").GetComponent<Animator>().Play("idle2");
+            }
 
 
         }
