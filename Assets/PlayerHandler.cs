@@ -18,12 +18,12 @@ public class PlayerHandler : MonoBehaviour
     public float jumpSpeed = 7.5f;
     private Vector2 input = Vector2.zero;
 
-    private bool canMove = true;
+    public static bool canMove = true;
     private bool canJump = true;
     private int z = 0;
     private bool isGenerationInProgress = false;
 
-    public int life = 3;
+    public static int life = 3;
     public GameObject[] hearts;
 
    
@@ -113,12 +113,25 @@ public class PlayerHandler : MonoBehaviour
         {
              life--;
 
+            Distance.distance--; //Stops distance from rising after falling backwards
+
+
+           // Hearts destruction and game over
            if (life < 1)
             {
                 Destroy(hearts[0].gameObject);
+               // GameObject.Find("Remy").GetComponent<Animator>().Play("FallingDown");
+                //GetComponent<Rigidbody>().AddForce(Vector3.back * 7, ForceMode.Impulse);
+
                 GameObject.Find("GameOverUI").GetComponent<Animator>().Play("GameOver");
+
+                await Task.Delay(2000);
+                GameObject.Find("Remy").GetComponent<Animator>().Play("idle2");
                 sideSpeed = 0;
                 runSpeed = 0;
+                Distance.distance = 0;
+                canMove = false;
+                return;
 
             }
             else if (life < 2)
@@ -138,9 +151,7 @@ public class PlayerHandler : MonoBehaviour
                 runSpeed = 0;
             } */
 
-            var textObject = GameObject.Find("LivesCounter");
-            var textComponent = textObject.GetComponent<TextMeshProUGUI>();
-            textComponent.text = "Lives: " + life.ToString();
+           
 
             sideSpeed = 0f;
 
@@ -156,11 +167,11 @@ public class PlayerHandler : MonoBehaviour
             await Task.Delay(200);
             canMove = true;
 
-            if (life < 1)
-            {
+          //  if (life < 1)
+           // {
                 //play game over idle animation
-                GameObject.Find("Remy").GetComponent<Animator>().Play("idle2");
-            }
+                //GameObject.Find("Remy").GetComponent<Animator>().Play("idle2");
+            //}
 
 
         }
