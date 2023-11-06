@@ -24,22 +24,25 @@ public class MapHandler : MonoBehaviour
     {
         //OBSTACLE GENERATION
 
-        isGenerationInProgress = true;
-        var obs = GameObject.Find("Obs1");
-        z += 800;
-        Instantiate(obs, new Vector3(0, 0, z), Quaternion.identity);
-        await Task.Delay(1000);
-        // isGenerationInProgress = false;
 
-        //PLANE GENERATION
+        if (Distance.distance % 41 == 0){ //mod function so that every 41 it would generate
+            isGenerationInProgress = true;
+            var obs = GameObject.Find("Obs1");
+            z += 800;
+            Instantiate(obs, new Vector3(0, 0, z), Quaternion.identity);
+            await Task.Delay(1000);
+            isGenerationInProgress = false;
 
-        var r = Random.Range(1, 3);
-        var env = GameObject.Find("Environment" + r.ToString());
-        z += 70;
-        Instantiate(env, new Vector3(0, 0, z), Quaternion.identity);
-        await Task.Delay(5000);
+            //PLANE GENERATION
 
-        isGenerationInProgress = false;
+            var r = Random.Range(1, 3);
+            var env = GameObject.Find("Environment" + r.ToString());
+            z += 70;
+            Instantiate(env, new Vector3(0, 0, z), Quaternion.identity);
+            await Task.Delay(5000);
+
+            isGenerationInProgress = false;
+        }
     }
 
 }

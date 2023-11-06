@@ -16,7 +16,7 @@ public class Distance : MonoBehaviour
     {
        if (PlayerHandler.canMove == true)
         {
-            if (isDistanceCalculating == false)
+            if (isDistanceCalculating == false && PlayerHandler.life>0)
             {
                 isDistanceCalculating = true;
                 distance++;

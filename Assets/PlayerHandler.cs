@@ -125,12 +125,15 @@ public class PlayerHandler : MonoBehaviour
 
                 GameObject.Find("GameOverUI").GetComponent<Animator>().Play("GameOver");
 
-                await Task.Delay(2000);
-                GameObject.Find("Remy").GetComponent<Animator>().Play("idle2");
+                
                 sideSpeed = 0;
                 runSpeed = 0;
                 Distance.distance = 0;
                 canMove = false;
+                GameObject.Find("Remy").GetComponent<Animator>().Play("FallingDown");
+                await Task.Delay(2000);
+                GameObject.Find("Remy").GetComponent<Animator>().Play("Idle");
+                
                 return;
 
             }
